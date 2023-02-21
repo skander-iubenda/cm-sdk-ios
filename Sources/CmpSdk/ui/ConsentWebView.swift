@@ -11,12 +11,12 @@ import WebKit
 final class ConsentWebView: NSObject, UIViewRepresentable {
     let layout: CGRect
     let url: URL
-    let callbacks: CmpWebViewDelegate
+    let delegate: CmpWebViewDelegate
     
-    init(layout: CGRect, url: URL, callbacks: CmpWebViewDelegate) {
+    init(layout: CGRect, url: URL, delegate: CmpWebViewDelegate) {
         self.layout = layout
         self.url = url
-        self.callbacks = callbacks
+        self.delegate = delegate
     }
     
     func makeUIView(context: Context) -> WKWebView {
@@ -54,23 +54,24 @@ extension ConsentWebView: WKScriptMessageHandler {
         switch message.name {
         case "consent":
             guard let consent = message.body as? [String: Any], let cmpKey = consent["cmpApiKey"] as? String else { return }
-            callbacks.onConsent(consent:cmpKey, jsonObject: consent)
+            delegate.didReceivedConsentData(consent: cmpKey, jsonObject: consent)
         case "open":
-            callbacks.onOpen()
+            delegate.didOpenConsentView()
         case "error":
             guard let error = message.body as? Error else { return }
-            callbacks.onError(error: error)
-        default:
+            delegate.didEncounterConsentError(message: error.localizedDescription)
             break
-    }
+        default:
+            delegate.didEncounterConsentError(message: "Unknown Feedback")
+        }
 }
 }
 
 struct ConsentWebViewController: View {
     let layout: CGRect
-    let callbacks: CmpWebViewDelegate
+    let delegate: CmpWebViewDelegate
     let url : URL
     var body: some View {
-        ConsentWebView(layout: layout, url: url, callbacks: callbacks)
+        ConsentWebView(layout: layout, url: url, delegate: delegate)
     }
 }

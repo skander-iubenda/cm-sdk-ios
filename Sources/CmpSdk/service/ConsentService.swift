@@ -12,7 +12,9 @@ class ConsentService {
     static let shared = ConsentService()
     var delegate: CmpConsentViewDelegate
 
-    private init() {}
+    private init() {
+        self.delegate = DefaultConsentViewDelegate()
+    }
     
     static func saveConsent(dictionary : [String : Any]) {
         do {

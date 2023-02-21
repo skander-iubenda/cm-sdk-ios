@@ -1,7 +1,8 @@
 import Foundation
+import SwiftUI
 import UIKit
 
-public struct CmpSdk {
+struct CmpSdk {
     
     init(id: String, domain: String, appName: String, language: String) {
         CmpConfig.shared.configure(id: id, appName: appName, domain: domain, language: language)
@@ -17,105 +18,110 @@ public struct CmpSdk {
     }
     
     
-    //    func initialize(config: [String : Any], cmpService: String, callbackWrapper: (() -> Void)?) {
-//        <#code#>
-//    }
+//    func initialize(config: [String : Any], cmpService: String, callbackWrapper: (() -> Void)?) {
 //
-//    func calledThisDay() -> Bool {
-//        <#code#>
 //    }
-//
-//    func needsAcceptance() -> Bool {
-//        <#code#>
-//    }
-//
-//    func getAllPurposes() -> [String] {
-//        <#code#>
-//    }
-//
-//    func getAllPurposeList() -> [String : Any] {
-//        <#code#>
-//    }
-//
-//    func getAgreedPurposes() -> [String] {
-//        <#code#>
-//    }
-//
-//    func getAgreedPurposeList() -> [String : Any] {
-//        <#code#>
-//    }
-//
-//    func getAllVendors() -> [String] {
-//        <#code#>
-//    }
-//
-//    func getAllVendorsList() -> [String : Any] {
-//        <#code#>
-//    }
-//
-//    func getAgreedVendors() -> [String] {
-//        <#code#>
-//    }
-//
-//    func getAgreedVendorList() -> [String : Any] {
-//        <#code#>
-//    }
-//
-//    func getUSPrivacyString() -> String {
-//        <#code#>
-//    }
-//
-//    func getGoogleACString() -> String {
-//        <#code#>
-//    }
-//
-//    func hasVendor(vendorId: String) -> Bool {
-//        <#code#>
-//    }
-//
-//    func hasPurpose(purposeId: String) -> Bool {
-//        <#code#>
-//    }
-//
-//    static func hasConsent() -> Bool {
-//        <#code#>
-//    }
-//
-//    static func needsServerUpdate() -> Bool {
-//        <#code#>
-//    }
-//
-//    static func importConsentString() {
-//        <#code#>
-//    }
-//
-//    static func exportConsentString() -> String {
-//        <#code#>
-//    }
-//
-//    func enableVendorList() {
-//        <#code#>
-//    }
-//
-//    func disableVendorList() {
-//        <#code#>
-//    }
-//
-//    func enablePurposeList() {
-//        <#code#>
-//    }
-//
-//    func disablePurposeList() {
-//        <#code#>
-//    }
-//
-//    func rejectAll() {
-//        <#code#>
-//    }
-//
-//    func acceptAll() {
-//        <#code#>
-//    }
+
+    func calledLast() -> Bool {
+        return true
+    }
+
+    func needsAcceptance() -> Bool {
+        return true
+    }
+
+    func getAllPurposes() -> [String] {
+        return []
+    }
+
+    func getAllPurposeList() -> [String : Any] {
+        return [:]
+    }
+
+    func getEnabledPurposes() -> [String] {
+        return []
+    }
+
+    func getEnabledPurposeList() -> [String : Any] {
+        return [:]
+    }
+
+    func getAllVendors() -> [String] {
+        return []
+    }
+
+    func getAllVendorsList() -> [String : Any] {
+        return [:]
+    }
+
+    func getEnabledVendors() -> [String] {
+        return []
+    }
+
+    func getEnabledVendorList() -> [String : Any] {
+        return [:]
+    }
+    
+    func getDisabledVendorList() -> [String] {
+        return []
+    }
+    
+    func getDisabledPurposeList() -> [String] {
+        return []
+    }
+
+    func getUSPrivacyString() -> String {
+        return "us privacy String"
+    }
+
+    func getGoogleACString() -> String {
+        return "google String"
+    }
+
+    func hasVendor(vendorId: String) -> Bool {
+        // TODO code
+        return true
+    }
+
+    func hasPurpose(purposeId: String) -> Bool {
+        return true
+    }
+
+    static func hasConsent() -> Bool {
+        return true
+    }
+
+    static func importConsentString(consentString : String) {
+        print("importing: " + consentString)
+    }
+
+    static func exportConsentString() -> String {
+        return "export"
+    }
+
+    func enableVendorList() {
+        print("enabling vendors")
+    }
+
+    func disableVendorList() {
+        print("disabling vendors")
+    }
+
+    func enablePurposeList() {
+        print("enabling purposes")
+    }
+
+    func disablePurposeList() {
+        print("disabling purposes")
+    }
+
+    func rejectAll() {
+        print("rejecting All")
+    }
+
+    func acceptAll() {
+        print("accepting All")
+    }
 //
     func openLayer() {
         guard let url : URL = URLBuilder(config: CmpConfig.shared).build() else {
@@ -124,27 +130,32 @@ public struct CmpSdk {
 
         
         let layout = CGRect(x: 0, y: 0, width: 400, height: 600)
-        var callbacks: CmpWebViewDelegate = {
-            class WebViewCallbackImplementation : CmpWebViewDelegate {
-                func didReceivedConsentData(consent: String, jsonObject: [String : Any]) {
-                    ConsentService.saveConsent(dictionary: jsonObject)
+        let callbacks: CmpWebViewDelegate = {
+            class AnonymousCmpWebViewDelegate: CmpWebViewDelegate {
+                func didReceivedConsentData(consent: String, jsonObject: [String: Any]) {
+                    print("received Consent")
+                    // Handle received consent data
                 }
                 
                 func didOpenConsentView() {
-                    
-                    <#code#>
+                    print("open Consent")
+                    // Handle consent view opening
                 }
                 
                 func didEncounterConsentError(message: String) {
-                    print(message)
+                    // Handle consent erro
+                    print("error")
+
                 }
-                
-                
+                init() {} // Add an initializer that takes no arguments
             }
-            
-        } as! CmpWebViewDelegate
-        let customWebViewController = ConsentWebViewController(layout: layout, callbacks: callbacks, url: url)
-        let topViewController = UIApplication.shared.keyWindow?.rootViewController
-            topViewController?.present(customWebViewController, animated: true, completion: nil)
+            return AnonymousCmpWebViewDelegate()
+        }()
+
+        guard let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) else { return }
+        let consentWebViewController = ConsentWebViewController(layout: layout, delegate: callbacks, url: url)
+        let hostingController = UIHostingController(rootView: consentWebViewController)
+        hostingController.modalPresentationStyle = .overCurrentContext
+        window.rootViewController?.present(hostingController, animated: true, completion: nil)
     }
 }
